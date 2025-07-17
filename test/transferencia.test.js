@@ -1,18 +1,16 @@
 const request = require('supertest');
 const { describe, it } = require('mocha');
 const { expect } = require('chai');
-require('dotenv').config();
+require('dotenv').config()
+const { obterToken } = require('../helpers/autenticacao')
 
 describe('Transferências', () => {
     describe('POST /transferencias', () => {
         it('Deve retornar 201 se a transferência for maior ou igual a R$ 10,00', async() => {
              //Capturar o token de autenticação
-             const respostaLogin =  await request(process.env.BASE_URL)
-                .post('/login')
-                .set('Content-Type', 'application/json')
-                .send({"username": "gui.bianchi",
-                        "senha": "123456" })
-            const token = respostaLogin.body.token;
+         
+             
+            const token =  await obterToken("gui.bianchi", "123456")
             
             const resposta =  await request(process.env.BASE_URL)
                 .post('/transferencias')
@@ -22,18 +20,13 @@ describe('Transferências', () => {
                         contaOrigem: 1,
                         contaDestino: 2,
                          valor: 10.00,
-                         token: "string"});
-            expect(resposta.status).to.equal(201);
+                         token: "string"})
+            expect(resposta.status).to.equal(201)
            
         })
         it('Deve retornar 422 se a transferência for menor que R$ 10,00', async() => {
             //Capturar o token de autenticação
-             const respostaLogin =  await request(process.env.BASE_URL)
-                .post('/login')
-                .set('Content-Type', 'application/json')
-                .send({"username": "gui.bianchi",
-                        "senha": "123456" })
-            const token = respostaLogin.body.token;
+             const token =  await obterToken("gui.bianchi", "123456")
             
             const resposta =  await request(process.env.BASE_URL)
                 .post('/transferencias')
@@ -44,7 +37,7 @@ describe('Transferências', () => {
                         contaDestino: 2,
                          valor: 9.99,
                          token: "string"});
-            expect(resposta.status).to.equal(422);
+            expect(resposta.status).to.equal(422)
             
         })
     })
