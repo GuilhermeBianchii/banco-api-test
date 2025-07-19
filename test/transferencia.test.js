@@ -6,12 +6,13 @@ const { obterToken } = require('../helpers/autenticacao')
 
 describe('Transferências', () => {
     describe('POST /transferencias', () => {
+        let token
+        beforeEach(async () => {
+            // Capturar o token de autenticação antes de cada teste
+            token = await obterToken('gui.bianchi', '123456')
+        })
+
         it('Deve retornar 201 se a transferência for maior ou igual a R$ 10,00', async() => {
-             //Capturar o token de autenticação
-         
-             
-            const token =  await obterToken("gui.bianchi", "123456")
-            
             const resposta =  await request(process.env.BASE_URL)
                 .post('/transferencias')
                 .set('Content-Type', 'application/json')
@@ -26,7 +27,7 @@ describe('Transferências', () => {
         })
         it('Deve retornar 422 se a transferência for menor que R$ 10,00', async() => {
             //Capturar o token de autenticação
-             const token =  await obterToken("gui.bianchi", "123456")
+            
             
             const resposta =  await request(process.env.BASE_URL)
                 .post('/transferencias')

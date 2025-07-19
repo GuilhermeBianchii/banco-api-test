@@ -5,8 +5,8 @@ const obterToken = async (usuario, senha)=> {
             .post('/login')
             .set('Content-Type', 'application/json')
             .send({
-                "username": usuario,
-                "senha": senha
+                'username': usuario,
+                'senha': senha
         })
 
     return respostaLogin.body.token
