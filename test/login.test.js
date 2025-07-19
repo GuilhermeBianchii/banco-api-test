@@ -1,7 +1,7 @@
-const request = require('supertest');
-const { describe, it } = require('mocha');
-const { expect } = require('chai');
-require('dotenv').config();
+const request = require('supertest')
+const { describe, it } = require('mocha')
+const { expect } = require('chai')
+require('dotenv').config()
 
 describe('Login Tests',() =>{
     describe('Post /login', () => {

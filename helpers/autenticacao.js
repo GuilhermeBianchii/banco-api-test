@@ -1,4 +1,4 @@
-const request = require('supertest');
+const request = require('supertest')
 
 const obterToken = async (usuario, senha)=> {
     const respostaLogin =  await request(process.env.BASE_URL)
