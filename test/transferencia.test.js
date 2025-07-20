@@ -6,12 +6,13 @@ const { obterToken } = require('../helpers/autenticacao')
 const postTransferencia = require('../fixtures/postTransferencia.json')
 
 describe('Transferências', () => {
-    describe('POST /transferencias', () => {
-        let token
+     let token
         beforeEach(async () => {
             // Capturar o token de autenticação antes de cada teste
             token = await obterToken('gui.bianchi', '123456')
         })
+
+    describe('POST /transferencias', () => {
 
         it('Deve retornar 201 se a transferência for maior ou igual a R$ 10,00', async() => {
             const bodyTransferencia = {...postTransferencia}
@@ -39,4 +40,31 @@ describe('Transferências', () => {
             
         })
     })
+    describe('GET /transferencias/{id}', () => {
+        it('Deve retornar sucesso com 200 e dados iguais ao registro de transferência contido no banco de dados quando o id for válido', async() =>{
+           
+            const resposta =  await request(process.env.BASE_URL)
+                .get('/transferencias/1') // Supondo que o ID 1 exista
+                .set('Authorization', `Bearer ${token}`)
+                
+                
+            expect(resposta.status).to.equal(200)
+            expect(resposta.body.id).to.equal(1)
+            expect(resposta.body.conta_origem_id).to.equal(1)
+            expect(resposta.body.conta_destino_id).to.equal(2)
+            expect(resposta.body.valor).to.equal(10.00)
+        })
+    })
+    describe('GET /transferencias', () => {
+        it('Deve retornar sucesso com 200 e uma lista de transferências com 10 itens', async() => {
+            
+            const resposta = await request(process.env.BASE_URL)
+            .get('/transferencias')
+            .set('Authorization', `Bearer ${token}`)
+            expect(resposta.status).to.equal(200)
+            expect(resposta.body.limit).to.equal(10)
+            expect(resposta.body.transferencias).to.have.lengthOf(10)
+         
+    })
+})
 })
